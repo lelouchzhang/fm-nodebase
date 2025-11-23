@@ -1,15 +1,24 @@
-import prisma from "@/lib/db"
-import { caller } from "@/trpc/server"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
+import { Client } from "./client"
+import { getQueryClient, trpc } from "@/trpc/server"
+import { Suspense } from "react";
+
+
 
 const page = async () => {
 
-  // const users = await prisma.user.findMany();
+  const queryClient = getQueryClient();
 
-  const users = await caller.getUsers();
+  void queryClient.prefetchQuery(trpc.hello.queryOptions({ text: 'fenmiao' }))
+
   return (
     <div className="text-red-500">
-      {JSON.stringify(users)}
-    </div>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<div>loading</div>}>
+          <Client />
+        </Suspense>
+      </HydrationBoundary>
+    </div >
   )
 }
 

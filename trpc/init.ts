@@ -1,6 +1,6 @@
 // 引入 tRPC 的核心函数
 import { initTRPC } from '@trpc/server';
-// 引入 React 的缓存函数
+// 引入 React 的缓存函数 :: NextJS 15
 import { cache } from 'react';
 
 /**

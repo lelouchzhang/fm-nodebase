@@ -32,7 +32,18 @@ export function LoginForm() {
         }
     })
     const onSubmit = async (values: LoginFormDatas) => {
-        console.log(values);
+        await authClient.signIn.email({
+            email: values.email,
+            password: values.password,
+            callbackURL: "/"
+        }, {
+            onSuccess: () => {
+                router.push("/")
+            },
+            onError: (ctx) => {
+                toast.error(ctx.error.message)
+            }
+        })
     }
 
     return (

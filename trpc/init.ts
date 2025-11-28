@@ -1,5 +1,7 @@
 // 引入 tRPC 的核心函数
-import { initTRPC } from '@trpc/server';
+import { auth } from '@/lib/auth';
+import { initTRPC, TRPCError } from '@trpc/server';
+import { headers } from 'next/headers';
 // 引入 React 的缓存函数 :: NextJS 15
 import { cache } from 'react';
 
@@ -26,10 +28,22 @@ const t = initTRPC.create({
     // transformer: superjson, // 注释掉了，后面会解释
 });
 
-// 导出三个核心工具：
 // 1. 创建路由器的函数
 export const createTRPCRouter = t.router;
 // 2. 创建调用器的工厂函数（后面会用到）
 export const createCallerFactory = t.createCallerFactory;
 // 3. 基础的过程（procedure）创建器
 export const baseProcedure = t.procedure;
+// 4. 受保护的过程（procedure）创建器
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    })
+    if (!session) {
+        throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Unauthorized",
+        })
+    }
+    return next({ ctx: { ...ctx, auth: session } })
+})

@@ -58,9 +58,11 @@ export function LoginForm() {
                             <div className='grid gap-6'>
                                 <div className='flex flex-col gap-4'>
                                     <Button variant='outline' className='w-full' type='button' disabled={form.formState.isSubmitting}>
+                                        <Image src="/images/github.svg" alt='github' width={20} height={20} />
                                         使用Github账号登录
                                     </Button>
                                     <Button variant='outline' className='w-full' type='button' disabled={form.formState.isSubmitting}>
+                                        <Image src="/images/google.svg" alt='google' width={20} height={20} />
                                         使用Google账号登录
                                     </Button>
                                 </div>

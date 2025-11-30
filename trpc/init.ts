@@ -35,6 +35,8 @@ export const createCallerFactory = t.createCallerFactory;
 // 3. 基础的过程（procedure）创建器
 export const baseProcedure = t.procedure;
 // 4. 受保护的过程（procedure）创建器
+// use 接收函数用于注册中间件，签名为 async ({ ctx, next }) => T
+// .use() 注册了一个函数，tRPC 会在合适的时机传给你 { ctx, next }，你调用 next() 就能继续。
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
     const session = await auth.api.getSession({
         headers: await headers(),

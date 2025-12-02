@@ -1,5 +1,3 @@
-// 引入 zod 用于验证输入数据
-import { email, z } from 'zod';
 // 从初始化文件导入基础 tools
 import { baseProcedure, createTRPCRouter, protectedProcedure } from '../init';
 import prisma from '@/lib/db';
@@ -7,7 +5,7 @@ import { inngest } from '@/inngest/client';
 
 // 创建主路由器，定义所有可用的 API
 export const appRouter = createTRPCRouter({
-    getWorkflows: protectedProcedure.query(({ ctx }) => {
+    getWorkflows: protectedProcedure.query(({ }) => {
         return prisma.workflow.findMany();
     }),
     createWorkflow: protectedProcedure.mutation(async () => {

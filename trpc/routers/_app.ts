@@ -5,7 +5,7 @@ import { inngest } from "@/inngest/client";
 
 // 创建主路由器，定义所有可用的 API
 export const appRouter = createTRPCRouter({
-  getWorkflows: protectedProcedure.query(({}) => {
+  getWorkflows: protectedProcedure.query(() => {
     return prisma.workflow.findMany();
   }),
   createWorkflow: protectedProcedure.mutation(async () => {
@@ -13,7 +13,7 @@ export const appRouter = createTRPCRouter({
       name: "test/hello.world",
       data: { email: "<EMAIL>" },
     });
-    return { success: true, message: "inngest created workflow successed" };
+    return { success: true, message: "inngest created workflow succeeed" };
   }),
 });
 

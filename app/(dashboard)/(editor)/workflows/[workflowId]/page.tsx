@@ -2,7 +2,7 @@ import { requireAuth } from "@/lib/auth-utils";
 
 type PageProps = {
   params: Promise<{
-    workflowId: String;
+    workflowId: string;
   }>;
 };
 

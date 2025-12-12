@@ -1,5 +1,6 @@
 // 引入 tRPC 的核心函数
 import { auth } from "@/lib/auth";
+import { polarClient } from "@/lib/polar";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
 // 引入 React 的缓存函数 :: NextJS 15
@@ -44,8 +45,21 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   if (!session) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
-      message: "Unauthorized",
+      message: "未登录",
     });
   }
   return next({ ctx: { ...ctx, auth: session } });
 });
+
+export const preniumProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const customer = await polarClient.customers.getStateExternal({
+    externalId: ctx.auth.user.id
+  });
+  if (!customer.activeSubscriptions || customer.activeSubscriptions.length === 0) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "无订阅或订阅已过期",
+    })
+  }
+  return next({ ctx: { ...ctx, customer } });
+})

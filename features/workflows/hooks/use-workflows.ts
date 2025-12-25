@@ -30,6 +30,7 @@ export const useCreateWorkflow = () => {
         trpc.workflows.create.mutationOptions({
             onSuccess: (data) => {
                 toast.success(`workflow "${data.name}" created successfully.`);
+                // 清除缓存，获取新增的数据。
                 queryClient.invalidateQueries(trpc.workflows.getMany.queryOptions());
             },
             onError: (error) => {
